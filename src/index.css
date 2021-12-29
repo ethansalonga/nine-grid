@@ -38,8 +38,8 @@ input[type=number] {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 160px 160px 160px;
-  grid-template-rows: 160px 160px 160px;
+  grid-template-columns: 150px 150px 150px;
+  grid-template-rows: 150px 150px 150px;
   grid-gap: 16px;
   justify-content: center;
 }
@@ -81,4 +81,20 @@ input[type=number] {
 
 .third {
   color: #2a3e2d;
+}
+
+.reset {
+  font-size: 16px;
+  color: #fff;
+  border: 1px solid #242424;
+  border-radius: 4px;
+  background-color: #242424;
+  margin-top: 8px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all 300ms ease;
+}
+
+.reset:hover {
+  background-color: #5c5c5c;
 }

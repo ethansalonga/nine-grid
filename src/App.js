@@ -33,19 +33,7 @@ function App() {
     const { data } = await axios.get(
       "https://61cb910e194ffe0017788d91.mockapi.io/sequences"
     );
-    setInput(data[0].sequence);
-    setFirst(data[0].sequence);
-    setSecond(data[1].sequence);
-    setThird(data[2].sequence);
-    setOne(data[0].sequence[0]);
-    setTwo(data[0].sequence[1]);
-    setThree(data[0].sequence[2]);
-    setFour(data[0].sequence[3]);
-    setFive(data[0].sequence[4]);
-    setSix(data[0].sequence[5]);
-    setSeven(data[0].sequence[6]);
-    setEight(data[0].sequence[7]);
-    setNine(data[0].sequence[8]);
+    initStates(data);
   };
 
   useEffect(() => {
@@ -75,24 +63,11 @@ function App() {
     } else if (checkRepeats(input)) {
       alert("Please don't enter any repeating digits");
     } else if (data.length !== 3) {
-      await axios.post(
-        "https://61cb910e194ffe0017788d91.mockapi.io/sequences",
-        {
+      await axios
+        .post("https://61cb910e194ffe0017788d91.mockapi.io/sequences", {
           sequence: `${input}`,
-        }
-      );
-      setOne(input[0]);
-      setTwo(input[1]);
-      setThree(input[2]);
-      setFour(input[3]);
-      setFive(input[4]);
-      setSix(input[5]);
-      setSeven(input[6]);
-      setEight(input[7]);
-      setNine(input[8]);
-      setThird(second);
-      setSecond(first);
-      setFirst(input);
+        })
+        .then(setStates());
     } else {
       await axios
         .put("https://61cb910e194ffe0017788d91.mockapi.io/sequences/3", {
@@ -113,20 +88,68 @@ function App() {
               sequence: `${input}`,
             }
           )
-        );
-      setOne(input[0]);
-      setTwo(input[1]);
-      setThree(input[2]);
-      setFour(input[3]);
-      setFive(input[4]);
-      setSix(input[5]);
-      setSeven(input[6]);
-      setEight(input[7]);
-      setNine(input[8]);
-      setThird(second);
-      setSecond(first);
-      setFirst(input);
+        )
+        .then(setStates());
     }
+  };
+
+  const setStates = () => {
+    setOne(input[0]);
+    setTwo(input[1]);
+    setThree(input[2]);
+    setFour(input[3]);
+    setFive(input[4]);
+    setSix(input[5]);
+    setSeven(input[6]);
+    setEight(input[7]);
+    setNine(input[8]);
+    setThird(second);
+    setSecond(first);
+    setFirst(input);
+  };
+
+  const initStates = (data) => {
+    setInput(data[0].sequence);
+    setFirst(data[0].sequence);
+    setSecond(data[1].sequence);
+    setThird(data[2].sequence);
+    setOne(data[0].sequence[0]);
+    setTwo(data[0].sequence[1]);
+    setThree(data[0].sequence[2]);
+    setFour(data[0].sequence[3]);
+    setFive(data[0].sequence[4]);
+    setSix(data[0].sequence[5]);
+    setSeven(data[0].sequence[6]);
+    setEight(data[0].sequence[7]);
+    setNine(data[0].sequence[8]);
+  };
+
+  const resetStates = async () => {
+    setInput([]);
+    setOne([1]);
+    setTwo([2]);
+    setThree([3]);
+    setFour([4]);
+    setFive([5]);
+    setSix([6]);
+    setSeven([7]);
+    setEight([8]);
+    setNine([9]);
+    setFirst([]);
+    setSecond([]);
+    setThird([]);
+    await axios
+      .delete("https://61cb910e194ffe0017788d91.mockapi.io/sequences/1")
+      .then(
+        await axios.delete(
+          "https://61cb910e194ffe0017788d91.mockapi.io/sequences/2"
+        )
+      )
+      .then(
+        await axios.delete(
+          "https://61cb910e194ffe0017788d91.mockapi.io/sequences/3"
+        )
+      );
   };
 
   return (
@@ -146,9 +169,7 @@ function App() {
             placeholder="987654321"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(event) =>
-              event.key === "Enter" && (renderData())
-            }
+            onKeyPress={(event) => event.key === "Enter" && renderData()}
           />
         </div>
         <div className="grid-container">
@@ -167,6 +188,9 @@ function App() {
           <First first={first} />
           <Second second={second} />
           <Third third={third} />
+          <button className="reset" onClick={() => resetStates()}>
+            Reset
+          </button>
         </div>
       </div>
     </>
