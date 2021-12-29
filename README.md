@@ -52,3 +52,4 @@ npm start
 * Re-factor inefficient code
 * Improve validation somehow, prevent user from typing invalid sequences at all
 * Improve the way data is handled and then re-rendered to page
+* Fix minor remaining bugs
