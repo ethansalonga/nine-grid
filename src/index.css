@@ -1,13 +1,84 @@
-body {
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap");
+
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Lato", sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.header {
+  text-align: center;
+  font-weight: 900;
+  margin-top: 40px;
+}
+
+.subheader {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.input {
+  display: block;
+  font-size: 20px;
+  margin: 20px auto;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 160px 160px 160px;
+  grid-template-rows: 160px 160px 160px;
+  grid-gap: 16px;
+  justify-content: center;
+}
+
+.square {
+  font-size: 40px;
+  color: #fff;
+  background-color: #242424;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.storage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.storage__header {
+  font-size: 24px;
+  margin: 40px 0 24px 0;
+}
+
+.storage__sequence {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.first {
+  color: #35723f;
+}
+
+.second {
+  color: #2f5836;
+}
+
+.third {
+  color: #2a3e2d;
 }
