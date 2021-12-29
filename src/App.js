@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import "./index.css";
+import axios from "axios";
 import One from "./components/grid/One";
 import Two from "./components/grid/Two";
 import Three from "./components/grid/Three";
@@ -8,8 +10,6 @@ import Six from "./components/grid/Six";
 import Seven from "./components/grid/Seven";
 import Eight from "./components/grid/Eight";
 import Nine from "./components/grid/Nine";
-import "./index.css";
-import axios from "axios";
 import First from "./components/storage/First";
 import Second from "./components/storage/Second";
 import Third from "./components/storage/Third";
@@ -29,6 +29,7 @@ function App() {
   const [second, setSecond] = useState([]);
   const [third, setThird] = useState([]);
 
+  // Set states from API upon page refresh
   const fetchData = async () => {
     const { data } = await axios.get(
       "https://61cb910e194ffe0017788d91.mockapi.io/sequences"
@@ -40,35 +41,50 @@ function App() {
     fetchData();
   }, []);
 
-  const checkZero = (input) => {
-    for (let i = 0; i < input.length; i++) {
-      if (input[i] == 0) {
-        return true;
-      }
-    }
-  };
-
-  const checkRepeats = (input) => {
-    return /(.).*\1/.test(input);
-  };
-
+  // Function runs when input is entered
   const renderData = async () => {
     const { data } = await axios.get(
       "https://61cb910e194ffe0017788d91.mockapi.io/sequences"
     );
+    // Validation logic
     if (input.length !== 9) {
       alert("Please enter a 9-digit number only");
     } else if (checkZero(input)) {
       alert("Please enter numbers from 1-9 only");
     } else if (checkRepeats(input)) {
       alert("Please don't enter any repeating digits");
-    } else if (data.length !== 3) {
+    }
+    // If API array does not have 3 objects yet, post new objects
+    else if (data.length !== 3) {
       await axios
         .post("https://61cb910e194ffe0017788d91.mockapi.io/sequences", {
           sequence: `${input}`,
         })
         .then(setStates());
-    } else {
+      // Update API using .put method, always making ID 1 the latest sequence
+      await axios
+        .put("https://61cb910e194ffe0017788d91.mockapi.io/sequences/3", {
+          sequence: `${second}`,
+        })
+        .then(
+          await axios.put(
+            "https://61cb910e194ffe0017788d91.mockapi.io/sequences/2",
+            {
+              sequence: `${first}`,
+            }
+          )
+        )
+        .then(
+          await axios.put(
+            "https://61cb910e194ffe0017788d91.mockapi.io/sequences/1",
+            {
+              sequence: `${input}`,
+            }
+          )
+        );
+    }
+    // If API array has 3 objects, skip posting new objects
+    else {
       await axios
         .put("https://61cb910e194ffe0017788d91.mockapi.io/sequences/3", {
           sequence: `${second}`,
@@ -93,6 +109,21 @@ function App() {
     }
   };
 
+  // Input validation for numbers 1-9 only
+  const checkZero = (input) => {
+    for (let i = 0; i < input.length; i++) {
+      if (input[i] == 0) {
+        return true;
+      }
+    }
+  };
+
+  // Input validation for non-repeating digits
+  const checkRepeats = (input) => {
+    return /(.).*\1/.test(input);
+  };
+
+  // Re-render grid squares and storage list
   const setStates = () => {
     setOne(input[0]);
     setTwo(input[1]);
@@ -108,11 +139,10 @@ function App() {
     setFirst(input);
   };
 
+  // Render grid squares and storage list from API on page refresh
   const initStates = (data) => {
     setInput(data[0].sequence);
     setFirst(data[0].sequence);
-    setSecond(data[1].sequence);
-    setThird(data[2].sequence);
     setOne(data[0].sequence[0]);
     setTwo(data[0].sequence[1]);
     setThree(data[0].sequence[2]);
@@ -122,8 +152,11 @@ function App() {
     setSeven(data[0].sequence[6]);
     setEight(data[0].sequence[7]);
     setNine(data[0].sequence[8]);
+    setSecond(data[1].sequence);
+    setThird(data[2].sequence);
   };
 
+  // Reset button re-renders page and clears API
   const resetStates = async () => {
     setInput([]);
     setOne([1]);
